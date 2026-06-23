@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rural Bank of Placer Inc. — Admin Department Inventory</title>
+<style>
+  :root{
+    --navy-950:#0c1622;
+    --navy-900:#11203a;
+    --navy-800:#16294a;
+    --navy-700:#1d3258;
+    --navy-600:#2a4571;
+    --slate-100:#eef1f6;
+    --slate-200:#dbe1ea;
+    --slate-400:#94a3b8;
+    --slate-500:#64748b;
+    --gold-500:#b8893f;
+    --gold-400:#cfa05c;
+    --gold-100:#f6ecd9;
+    --ok-600:#2f7d4f;
+    --ok-100:#e5f3ea;
+    --warn-600:#a8631a;
+    --warn-100:#fbeedc;
+    --danger-600:#b3402f;
+    --danger-100:#fbe7e3;
+    --paper:#f7f6f2;
+    --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font-body);
+    background:var(--paper);
+    color:var(--navy-950);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ============ LOGIN SCREEN ============ */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(184,137,63,0.10), transparent 45%),
+      linear-gradient(165deg, var(--navy-950) 0%, var(--navy-900) 55%, var(--navy-800) 100%);
+    padding:24px;
+  }
+
+  .ledger-mark{
+    width:54px;height:54px;
+    margin:0 auto 22px;
+    border:1.5px solid var(--gold-400);
+    border-radius:3px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .ledger-mark::before,.ledger-mark::after{
+    content:"";
+    position:absolute;
+    background:var(--gold-400);
+  }
+  .ledger-mark::before{ width:26px;height:1.5px; top:50%; left:50%; transform:translate(-50%,-50%);}
+  .ledger-mark::after{ width:1.5px;height:26px; top:50%; left:50%; transform:translate(-50%,-50%);}
+
+  .login-card{
+    width:100%;
+    max-width:400px;
+    background:var(--slate-100);
+    border-radius:6px;
+    padding:44px 40px 36px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(184,137,63,0.15);
+    text-align:center;
+  }
+  .login-eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold-500);
+    margin-bottom:6px;
+  }
+  .login-title{
+    font-family:var(--font-display);
+    font-size:23px;
+    line-height:1.3;
+    color:var(--navy-950);
+    margin:0 0 2px;
+    font-weight:600;
+  }
+  .login-sub{
+    font-size:13px;
+    color:var(--slate-500);
+    margin:0 0 30px;
+  }
+  .field{ text-align:left; margin-bottom:16px; }
+  .field label{
+    display:block;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--navy-700);
+    margin-bottom:7px;
+  }
+  .field input{
+    width:100%;
+    padding:12px 14px;
+    border:1.5px solid var(--slate-200);
+    border-radius:4px;
+    font-size:15px;
+    background:#fff;
+    color:var(--navy-950);
+    font-family:var(--font-body);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--navy-600);
+    box-shadow:0 0 0 3px rgba(42,69,113,0.12);
+  }
+  .login-btn{
+    width:100%;
+    padding:13px;
+    margin-top:6px;
+    background:var(--navy-900);
+    color:var(--gold-100);
+    border:none;
+    border-radius:4px;
+    font-size:14.5px;
+    font-weight:600;
+    letter-spacing:.02em;
+    cursor:pointer;
+    transition:background .15s;
+    font-family:var(--font-body);
+  }
+  .login-btn:hover{ background:var(--navy-800); }
+  .login-btn:disabled{ opacity:.6; cursor:default; }
+  .login-btn:focus-visible{ outline:2px solid var(--gold-400); outline-offset:2px; }
+  .login-error{
+    margin-top:14px;
+    font-size:13px;
+    color:var(--danger-600);
+    min-height:18px;
+  }
+  .login-foot{
+    margin-top:26px;
+    font-size:11.5px;
+    color:var(--slate-400);
+    border-top:1px solid var(--slate-200);
+    padding-top:16px;
+  }
+  .conn-status{
+    margin-top:14px;
+    font-size:11.5px;
+    font-family:var(--font-mono);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    color:var(--slate-400);
+  }
+  .conn-dot{ width:6px;height:6px;border-radius:50%; background:var(--slate-400); flex-shrink:0; }
+  .conn-dot.ok{ background:#5fbf86; }
+  .conn-dot.bad{ background:var(--danger-600); }
+
+  /* ============ APP SHELL ============ */
+  #app{ display:none; min-height:100vh; }
+  header.bank-header{
+    background:linear-gradient(165deg, var(--navy-950), var(--navy-800));
+    color:var(--slate-100);
+    padding:22px 28px;
+    position:sticky;
+    top:0;
+    z-index:30;
+    box-shadow:0 2px 0 var(--gold-500);
+  }
+  .header-inner{
+    max-width:1280px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .bank-id{ display:flex; align-items:center; gap:14px; }
+  .bank-id .mark{ width:38px;height:38px; border:1.5px solid var(--gold-400); border-radius:3px; position:relative; flex-shrink:0;}
+  .bank-id .mark::before,.bank-id .mark::after{ content:""; position:absolute; background:var(--gold-400);}
+  .bank-id .mark::before{ width:18px;height:1.5px; top:50%; left:50%; transform:translate(-50%,-50%);}
+  .bank-id .mark::after{ width:1.5px;height:18px; top:50%; left:50%; transform:translate(-50%,-50%);}
+  .bank-id h1{
+    font-family:var(--font-display);
+    font-size:19px;
+    margin:0;
+    line-height:1.25;
+    font-weight:600;
+  }
+  .bank-id p{
+    margin:1px 0 0;
+    font-size:12px;
+    color:var(--gold-100);
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    font-family:var(--font-mono);
+  }
+  .header-actions{ display:flex; align-items:center; gap:14px; }
+  .sync-pill{
+    display:flex; align-items:center; gap:7px;
+    font-size:11.5px; color:var(--slate-200);
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    padding:6px 12px; border-radius:20px;
+    font-family:var(--font-mono);
+  }
+  .sync-dot{ width:6px;height:6px;border-radius:50%; background:#5fbf86; flex-shrink:0;}
+  .sync-dot.syncing{ background:var(--gold-400); animation:pulse 1s infinite; }
+  .sync-dot.error{ background:var(--danger-600); animation:none; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .logout-btn{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.25);
+    color:var(--slate-100);
+    padding:8px 16px;
+    border-radius:4px;
+    font-size:12.5px;
+    cursor:pointer;
+    font-family:var(--font-body);
+    transition:background .15s;
+  }
+  .logout-btn:hover{ background:rgba(255,255,255,0.08); }
+  .logout-btn:disabled{ opacity:.6; cursor:default; }
+
+  main{ max-width:1280px; margin:0 auto; padding:28px; }
+
+  .retry-banner{
+    background:var(--warn-100);border:1px solid #e8c896;color:var(--warn-600);
+    padding:10px 16px;border-radius:5px;font-size:13px;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .retry-banner button{
+    background:var(--warn-600);color:#fff;border:none;padding:6px 14px;
+    border-radius:4px;font-size:12.5px;cursor:pointer;font-family:var(--font-body);
+  }
+
+  /* Stat strip */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .stat-card{
+    background:#fff;
+    border:1px solid var(--slate-200);
+    border-left:3px solid var(--navy-700);
+    border-radius:5px;
+    padding:16px 18px;
+  }
+  .stat-card.warn{ border-left-color:var(--warn-600); }
+  .stat-card.danger{ border-left-color:var(--danger-600); }
+  .stat-card .label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--slate-500); font-family:var(--font-mono); margin-bottom:6px;
+  }
+  .stat-card .value{
+    font-family:var(--font-display); font-size:26px; font-weight:600; color:var(--navy-950);
+  }
+  .stat-card .sub{ font-size:11.5px; color:var(--slate-500); margin-top:3px;}
+
+  /* Toolbar */
+  .toolbar{
+    display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .toolbar input[type="text"], .toolbar select{
+    padding:10px 13px;
+    border:1.5px solid var(--slate-200);
+    border-radius:4px;
+    font-size:13.5px;
+    background:#fff;
+    font-family:var(--font-body);
+    color:var(--navy-950);
+  }
+  .toolbar input[type="text"]{ flex:1; min-width:180px; }
+  .toolbar input:focus, .toolbar select:focus{ outline:none; border-color:var(--navy-600); }
+  .btn{
+    padding:10px 18px;
+    border-radius:4px;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    border:none;
+    font-family:var(--font-body);
+    transition:background .15s, opacity .15s;
+    white-space:nowrap;
+  }
+  .btn:disabled{ opacity:.6; cursor:default; }
+  .btn-primary{ background:var(--navy-900); color:var(--gold-100); }
+  .btn-primary:hover{ background:var(--navy-800); }
+  .btn-ghost{ background:#fff; color:var(--navy-800); border:1.5px solid var(--slate-200); }
+  .btn-ghost:hover{ background:var(--slate-100); }
+  .btn-danger-ghost{ background:#fff; color:var(--danger-600); border:1.5px solid var(--danger-100); }
+  .btn-danger-ghost:hover{ background:var(--danger-100); }
+
+  /* Table */
+  .table-wrap{
+    background:#fff;
+    border:1px solid var(--slate-200);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  table{ width:100%; border-collapse:collapse; }
+  thead th{
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--slate-500);
+    font-family:var(--font-mono);
+    font-weight:600;
+    padding:13px 16px;
+    background:var(--slate-100);
+    border-bottom:1px solid var(--slate-200);
+  }
+  tbody td{
+    padding:13px 16px;
+    font-size:13.5px;
+    border-bottom:1px solid var(--slate-200);
+    color:var(--navy-950);
+    vertical-align:middle;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr:hover{ background:#fafbfc; }
+  .item-name{ font-weight:600; }
+  .item-cat{ font-size:11.5px; color:var(--slate-500); }
+  .qty-badge{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:20px;
+    font-size:12.5px;
+    font-weight:600;
+    font-family:var(--font-mono);
+  }
+  .qty-ok{ background:var(--ok-100); color:var(--ok-600); }
+  .qty-low{ background:var(--warn-100); color:var(--warn-600); }
+  .qty-out{ background:var(--danger-100); color:var(--danger-600); }
+  .row-actions{ display:flex; gap:8px; }
+  .icon-btn{
+    background:none; border:1px solid var(--slate-200); cursor:pointer;
+    padding:6px 11px; border-radius:4px; font-size:12px; color:var(--navy-700);
+    font-family:var(--font-body);
+  }
+  .icon-btn:hover{ background:var(--slate-100); }
+  .icon-btn.del:hover{ background:var(--danger-100); color:var(--danger-600); border-color:var(--danger-100); }
+  .peso{ font-family:var(--font-mono); }
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--slate-500);
+  }
+  .empty-state .big{ font-family:var(--font-display); font-size:18px; color:var(--navy-800); margin-bottom:6px;}
+
+  /* Modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(12,22,34,0.55);
+    display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .modal-overlay.show{ display:flex; }
+  .modal{
+    background:#fff; border-radius:6px; width:100%; max-width:460px;
+    padding:28px; box-shadow:0 30px 60px -10px rgba(0,0,0,0.4);
+  }
+  .modal h2{
+    font-family:var(--font-display); font-size:19px; margin:0 0 4px; color:var(--navy-950);
+  }
+  .modal .modal-sub{ font-size:12.5px; color:var(--slate-500); margin:0 0 20px; }
+  .modal-grid{ display:grid; gap:14px; }
+  .modal .field input, .modal .field select{
+    width:100%; padding:10px 13px; border:1.5px solid var(--slate-200);
+    border-radius:4px; font-size:13.5px; font-family:var(--font-body); color:var(--navy-950);
+  }
+  .modal .field label{ font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--navy-700); display:block; margin-bottom:6px;}
+  .modal .field input:focus, .modal .field select:focus{ outline:none; border-color:var(--navy-600); }
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
+
+  .toast{
+    position:fixed; bottom:24px; right:24px; z-index:60;
+    background:var(--navy-950); color:var(--slate-100); padding:13px 20px;
+    border-radius:5px; font-size:13px; box-shadow:0 10px 30px -8px rgba(0,0,0,0.4);
+    border-left:3px solid var(--gold-400);
+    display:flex; align-items:center; gap:10px;
+    opacity:0; transform:translateY(8px); transition:opacity .2s, transform .2s;
+    pointer-events:none;
+    max-width:360px;
+  }
+  .toast.show{ opacity:1; transform:translateY(0); }
+  .toast.error{ border-left-color:var(--danger-600); }
+
+  footer.app-foot{
+    text-align:center; padding:30px 20px 40px; font-size:11.5px; color:var(--slate-400);
+  }
+
+  @media (max-width:760px){
+    .stats{ grid-template-columns:repeat(2,1fr); }
+    .two-col{ grid-template-columns:1fr; }
+    .header-inner{ flex-direction:column; align-items:flex-start; }
+    table{ font-size:12.5px; }
+    thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="ledger-mark"></div>
+    <div class="login-eyebrow">Admin Department</div>
+    <h1 class="login-title">Rural Bank of Placer Inc.</h1>
+    <p class="login-sub">Office Supplies Inventory System</p>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="field">
+        <label for="pwInput">Access Password</label>
+        <input type="password" id="pwInput" placeholder="Enter department password" autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn" id="loginSubmitBtn">Sign In</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+
+    <div class="conn-status" id="connStatus">
+      <span class="conn-dot" id="connDot"></span>
+      <span id="connLabel">Checking server connection…</span>
+    </div>
+
+    <div class="login-foot">
+      Default password is <strong>placer2024</strong> on first run.
+      Change it after signing in, in the toolbar.
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="app">
+  <header class="bank-header">
+    <div class="header-inner">
+      <div class="bank-id">
+        <div class="mark"></div>
+        <div>
+          <h1>Rural Bank of Placer Inc.</h1>
+          <p>Admin Department &mdash; Office Supplies Inventory</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="sync-pill"><span class="sync-dot" id="syncDot"></span><span id="syncLabel">Synced</span></div>
+        <button class="logout-btn" id="settingsBtn">Change Password</button>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="bannerSlot"></div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="label">Total Items</div>
+        <div class="value" id="statTotalItems">0</div>
+        <div class="sub">distinct supplies tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Stock Value</div>
+        <div class="value" id="statTotalValue">₱0.00</div>
+        <div class="sub">at current unit cost</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="label">Low Stock</div>
+        <div class="value" id="statLow">0</div>
+        <div class="sub">at or below reorder level</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="label">Out of Stock</div>
+        <div class="value" id="statOut">0</div>
+        <div class="sub">zero quantity on hand</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by item name or category…">
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+      </select>
+      <select id="statusFilter">
+        <option value="">All Stock Levels</option>
+        <option value="ok">Sufficient</option>
+        <option value="low">Low Stock</option>
+        <option value="out">Out of Stock</option>
+      </select>
+      <button class="btn btn-ghost" id="exportBtn">Export CSV</button>
+      <button class="btn btn-primary" id="addItemBtn">+ Add Item</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Category</th>
+            <th>Unit</th>
+            <th>Qty on Hand</th>
+            <th>Reorder Level</th>
+            <th>Unit Cost</th>
+            <th>Total Value</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="itemsTbody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="big">No supplies recorded yet</div>
+        <div>Click "+ Add Item" to start building the inventory.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-foot">Rural Bank of Placer Inc. — Admin Department Internal Use Only</footer>
+</div>
+
+<!-- Add/Edit Item Modal -->
+<div class="modal-overlay" id="itemModalOverlay">
+  <div class="modal">
+    <h2 id="itemModalTitle">Add Office Supply</h2>
+    <p class="modal-sub">Record details for this inventory item.</p>
+    <form id="itemForm">
+      <input type="hidden" id="itemId">
+      <div class="modal-grid">
+        <div class="field">
+          <label for="itemName">Item Name</label>
+          <input type="text" id="itemName" placeholder="e.g. A4 Bond Paper (Ream)" required>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label for="itemCategory">Category</label>
+            <input type="text" id="itemCategory" placeholder="e.g. Paper Products" required>
+          </div>
+          <div class="field">
+            <label for="itemUnit">Unit</label>
+            <input type="text" id="itemUnit" placeholder="e.g. ream, box, pc" required>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label for="itemQty">Quantity on Hand</label>
+            <input type="number" id="itemQty" min="0" step="1" value="0" required>
+          </div>
+          <div class="field">
+            <label for="itemReorder">Reorder Level</label>
+            <input type="number" id="itemReorder" min="0" step="1" value="5" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="itemCost">Unit Cost (₱)</label>
+          <input type="number" id="itemCost" min="0" step="0.01" value="0.00" required>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelItemBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveItemBtn">Save Item</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal-overlay" id="pwModalOverlay">
+  <div class="modal">
+    <h2>Change Department Password</h2>
+    <p class="modal-sub">This password is shared by everyone who opens this inventory system.</p>
+    <form id="pwForm">
+      <div class="modal-grid">
+        <div class="field">
+          <label for="currentPwInput">Current Password</label>
+          <input type="password" id="currentPwInput" required>
+        </div>
+        <div class="field">
+          <label for="newPwInput">New Password</label>
+          <input type="password" id="newPwInput" required minlength="4">
+        </div>
+        <div class="field">
+          <label for="confirmPwInput">Confirm New Password</label>
+          <input type="password" id="confirmPwInput" required minlength="4">
+        </div>
+      </div>
+      <div class="login-error" id="pwError"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelPwBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="pwSubmitBtn">Update Password</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModalOverlay">
+  <div class="modal">
+    <h2>Remove Item?</h2>
+    <p class="modal-sub" id="deleteModalText">This will permanently remove the item from the shared inventory.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="cancelDeleteBtn">Cancel</button>
+      <button type="button" class="btn btn-danger-ghost" id="confirmDeleteBtn">Remove Item</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------------------------------------------------------------
+  // API layer — talks to the real backend server (server.js), which
+  // stores everything in a SQLite database file on disk. This is what
+  // actually makes data centralized and durable across devices, reloads,
+  // and logouts: it lives on the server, not in this page.
+  // ---------------------------------------------------------------------
+  const API_BASE = ''; // same origin as this page (server serves both API and frontend)
+  const SESSION_KEY = 'rbpi_session_token'; // sessionStorage only holds the token, not data
+
+  let sessionToken = null;
+  let state = { items: [] };
+
+  function apiHeaders(){
+    const h = { 'Content-Type': 'application/json' };
+    if(sessionToken) h['X-Session-Token'] = sessionToken;
+    return h;
+  }
+
+  async function apiCall(path, options){
+    options = options || {};
+    let res;
+    try{
+      res = await fetch(API_BASE + path, {
+        method: options.method || 'GET',
+        headers: apiHeaders(),
+        body: options.body ? JSON.stringify(options.body) : undefined
+      });
+    }catch(networkErr){
+      return { ok:false, status:0, data:null, networkError:true };
+    }
+    let data = null;
+    try{ data = await res.json(); }catch(e){ /* no body */ }
+    if(res.status === 401){
+      handleSessionExpired();
+    }
+    return { ok: res.ok, status: res.status, data, networkError:false };
+  }
+
+  function handleSessionExpired(){
+    sessionToken = null;
+    try{ sessionStorage.removeItem(SESSION_KEY); }catch(e){}
+  }
+
+  // ---------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------
+  function peso(n){
+    const v = Number(n) || 0;
+    return '₱' + v.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function showToast(msg, isError){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.toggle('error', !!isError);
+    t.classList.add('show');
+    clearTimeout(t._hideTimer);
+    t._hideTimer = setTimeout(()=> t.classList.remove('show'), 3200);
+  }
+  function setSyncing(mode){
+    // mode: 'idle' | 'syncing' | 'error'
+    const dot = document.getElementById('syncDot');
+    const label = document.getElementById('syncLabel');
+    dot.classList.remove('syncing','error');
+    if(mode === 'syncing'){ dot.classList.add('syncing'); label.textContent = 'Saving…'; }
+    else if(mode === 'error'){ dot.classList.add('error'); label.textContent = 'Sync error'; }
+    else { label.textContent = 'Synced'; }
+  }
+  function statusOf(item){
+    const qty = Number(item.qty) || 0;
+    const reorder = Number(item.reorder) || 0;
+    if(qty <= 0) return 'out';
+    if(qty <= reorder) return 'low';
+    return 'ok';
+  }
+  function statusLabel(s){
+    return s === 'out' ? 'Out of Stock' : s === 'low' ? 'Low Stock' : 'Sufficient';
+  }
+
+  function showBanner(message){
+    const slot = document.getElementById('bannerSlot');
+    slot.innerHTML = `
+      <div class="retry-banner">
+        <span>${escapeHtml(message)}</span>
+        <button id="retryLoadBtn" type="button">Retry</button>
+      </div>`;
+    document.getElementById('retryLoadBtn').addEventListener('click', async () => {
+      await refreshItems();
+    });
+  }
+  function clearBanner(){
+    document.getElementById('bannerSlot').innerHTML = '';
+  }
+
+  // ---------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------
+  function populateCategoryFilter(){
+    const sel = document.getElementById('categoryFilter');
+    const current = sel.value;
+    const cats = Array.from(new Set(state.items.map(i => i.category).filter(Boolean))).sort();
+    sel.innerHTML = '<option value="">All Categories</option>' +
+      cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    sel.value = current;
+  }
+
+  function renderStats(){
+    const total = state.items.length;
+    const totalValue = state.items.reduce((sum, i) => sum + (Number(i.qty)||0) * (Number(i.cost)||0), 0);
+    const low = state.items.filter(i => statusOf(i) === 'low').length;
+    const out = state.items.filter(i => statusOf(i) === 'out').length;
+    document.getElementById('statTotalItems').textContent = total;
+    document.getElementById('statTotalValue').textContent = peso(totalValue);
+    document.getElementById('statLow').textContent = low;
+    document.getElementById('statOut').textContent = out;
+  }
+
+  function getFiltered(){
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const cat = document.getElementById('categoryFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    return state.items.filter(item => {
+      if(q && !(item.name.toLowerCase().includes(q) || item.category.toLowerCase().includes(q))) return false;
+      if(cat && item.category !== cat) return false;
+      if(status && statusOf(item) !== status) return false;
+      return true;
+    });
+  }
+
+  function renderTable(){
+    const tbody = document.getElementById('itemsTbody');
+    const empty = document.getElementById('emptyState');
+    const filtered = getFiltered().slice().sort((a,b) => a.name.localeCompare(b.name));
+
+    if(state.items.length === 0){
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      empty.querySelector('.big').textContent = 'No supplies recorded yet';
+      empty.querySelector('div:last-child').textContent = 'Click "+ Add Item" to start building the inventory.';
+      return;
+    }
+    if(filtered.length === 0){
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      empty.querySelector('.big').textContent = 'No matching items';
+      empty.querySelector('div:last-child').textContent = 'Try adjusting your search or filters.';
+      return;
+    }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = filtered.map(item => {
+      const s = statusOf(item);
+      const lineValue = (Number(item.qty)||0) * (Number(item.cost)||0);
+      return `
+        <tr data-id="${item.id}">
+          <td class="item-name">${escapeHtml(item.name)}</td>
+          <td><span class="item-cat">${escapeHtml(item.category)}</span></td>
+          <td>${escapeHtml(item.unit)}</td>
+          <td>${Number(item.qty)||0}</td>
+          <td>${Number(item.reorder)||0}</td>
+          <td class="peso">${peso(item.cost)}</td>
+          <td class="peso">${peso(lineValue)}</td>
+          <td><span class="qty-badge qty-${s}">${statusLabel(s)}</span></td>
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn edit-btn" data-id="${item.id}">Edit</button>
+              <button class="icon-btn del del-btn" data-id="${item.id}">Remove</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderAll(){
+    populateCategoryFilter();
+    renderStats();
+    renderTable();
+  }
+
+  // ---------------------------------------------------------------------
+  // Load items from server (the single source of truth)
+  // ---------------------------------------------------------------------
+  async function refreshItems(){
+    const res = await apiCall('/api/items');
+    if(res.networkError){
+      showBanner('Cannot reach the server right now. Showing last known data.');
+      return false;
+    }
+    if(!res.ok){
+      if(res.status === 401){
+        // Session expired mid-use — send back to login without losing the page state.
+        showAppScreen(false);
+        showToast('Your session expired. Please log in again.', true);
+        return false;
+      }
+      showBanner((res.data && res.data.error) || 'Failed to load inventory from the server.');
+      return false;
+    }
+    clearBanner();
+    state.items = (res.data && res.data.items) || [];
+    renderAll();
+    return true;
+  }
+
+  // ---------------------------------------------------------------------
+  // Item modal
+  // ---------------------------------------------------------------------
+  const itemModalOverlay = document.getElementById('itemModalOverlay');
+  function openItemModal(item){
+    document.getElementById('itemForm').reset();
+    if(item){
+      document.getElementById('itemModalTitle').textContent = 'Edit Office Supply';
+      document.getElementById('itemId').value = item.id;
+      document.getElementById('itemName').value = item.name;
+      document.getElementById('itemCategory').value = item.category;
+      document.getElementById('itemUnit').value = item.unit;
+      document.getElementById('itemQty').value = item.qty;
+      document.getElementById('itemReorder').value = item.reorder;
+      document.getElementById('itemCost').value = item.cost;
+    } else {
+      document.getElementById('itemModalTitle').textContent = 'Add Office Supply';
+      document.getElementById('itemId').value = '';
+      document.getElementById('itemQty').value = 0;
+      document.getElementById('itemReorder').value = 5;
+      document.getElementById('itemCost').value = '0.00';
+    }
+    itemModalOverlay.classList.add('show');
+    setTimeout(()=> document.getElementById('itemName').focus(), 50);
+  }
+  function closeItemModal(){ itemModalOverlay.classList.remove('show'); }
+
+  document.getElementById('addItemBtn').addEventListener('click', () => openItemModal(null));
+  document.getElementById('cancelItemBtn').addEventListener('click', closeItemModal);
+  itemModalOverlay.addEventListener('click', e => { if(e.target === itemModalOverlay) closeItemModal(); });
+
+  document.getElementById('itemForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const id = document.getElementById('itemId').value;
+    const payload = {
+      name: document.getElementById('itemName').value.trim(),
+      category: document.getElementById('itemCategory').value.trim(),
+      unit: document.getElementById('itemUnit').value.trim(),
+      qty: parseInt(document.getElementById('itemQty').value, 10) || 0,
+      reorder: parseInt(document.getElementById('itemReorder').value, 10) || 0,
+      cost: parseFloat(document.getElementById('itemCost').value) || 0
+    };
+    if(!payload.name || !payload.category || !payload.unit){ return; }
+
+    const saveBtn = document.getElementById('saveItemBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
+    setSyncing('syncing');
+
+    const res = id
+      ? await apiCall('/api/items/' + encodeURIComponent(id), { method:'PUT', body: payload })
+      : await apiCall('/api/items', { method:'POST', body: payload });
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Save Item';
+
+    if(res.networkError){
+      setSyncing('error');
+      showToast('Could not reach the server. Item was NOT saved — please retry.', true);
+      return; // keep modal open so nothing is lost
+    }
+    if(!res.ok){
+      setSyncing('error');
+      showToast((res.data && res.data.error) || 'Failed to save item.', true);
+      return; // keep modal open
+    }
+
+    setSyncing('idle');
+    closeItemModal();
+    showToast(id ? 'Item updated.' : 'Item added to inventory.');
+    await refreshItems(); // pull the authoritative state back from the server
+  });
+
+  // ---------------------------------------------------------------------
+  // Table actions
+  // ---------------------------------------------------------------------
+  document.getElementById('itemsTbody').addEventListener('click', function(e){
+    const editBtn = e.target.closest('.edit-btn');
+    const delBtn = e.target.closest('.del-btn');
+    if(editBtn){
+      const item = state.items.find(i => i.id === editBtn.dataset.id);
+      if(item) openItemModal(item);
+    }
+    if(delBtn){
+      pendingDeleteId = delBtn.dataset.id;
+      const item = state.items.find(i => i.id === pendingDeleteId);
+      document.getElementById('deleteModalText').textContent =
+        item ? `Remove "${item.name}" from the shared inventory? This cannot be undone.` : 'Remove this item?';
+      document.getElementById('deleteModalOverlay').classList.add('show');
+    }
+  });
+
+  let pendingDeleteId = null;
+  document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+    pendingDeleteId = null;
+    document.getElementById('deleteModalOverlay').classList.remove('show');
+  });
+  document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if(!pendingDeleteId) {
+      document.getElementById('deleteModalOverlay').classList.remove('show');
+      return;
+    }
+    const id = pendingDeleteId;
+    pendingDeleteId = null;
+
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Removing…';
+    setSyncing('syncing');
+
+    const res = await apiCall('/api/items/' + encodeURIComponent(id), { method:'DELETE' });
+
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Remove Item';
+    document.getElementById('deleteModalOverlay').classList.remove('show');
+
+    if(res.networkError){
+      setSyncing('error');
+      showToast('Could not reach the server. Item was NOT removed.', true);
+      return;
+    }
+    if(!res.ok){
+      setSyncing('error');
+      showToast((res.data && res.data.error) || 'Failed to remove item.', true);
+      return;
+    }
+    setSyncing('idle');
+    showToast('Item removed.');
+    await refreshItems();
+  });
+
+  // ---------------------------------------------------------------------
+  // Filters
+  // ---------------------------------------------------------------------
+  document.getElementById('searchInput').addEventListener('input', renderTable);
+  document.getElementById('categoryFilter').addEventListener('change', renderTable);
+  document.getElementById('statusFilter').addEventListener('change', renderTable);
+
+  // ---------------------------------------------------------------------
+  // Export CSV
+  // ---------------------------------------------------------------------
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const rows = [['Item','Category','Unit','Qty on Hand','Reorder Level','Unit Cost (PHP)','Total Value (PHP)','Status']];
+    state.items.forEach(i => {
+      rows.push([
+        i.name, i.category, i.unit, i.qty, i.reorder,
+        (Number(i.cost)||0).toFixed(2),
+        ((Number(i.qty)||0)*(Number(i.cost)||0)).toFixed(2),
+        statusLabel(statusOf(i))
+      ]);
+    });
+    const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `RBPI_Office_Supplies_Inventory_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('CSV exported.');
+  });
+
+  // ---------------------------------------------------------------------
+  // Login / session
+  // ---------------------------------------------------------------------
+  function showAppScreen(show){
+    document.getElementById('app').style.display = show ? 'block' : 'none';
+    document.getElementById('loginScreen').style.display = show ? 'none' : 'flex';
+    if(!show){
+      document.getElementById('pwInput').value = '';
+      document.getElementById('loginError').textContent = '';
+    }
+  }
+
+  async function checkServerConnection(){
+    const dot = document.getElementById('connDot');
+    const label = document.getElementById('connLabel');
+    try{
+      const res = await fetch(API_BASE + '/api/login', { method:'OPTIONS' }).catch(()=>null);
+      // Any response (even 404/405) means the server is reachable.
+      dot.className = 'conn-dot ok';
+      label.textContent = 'Server connected';
+    }catch(e){
+      dot.className = 'conn-dot bad';
+      label.textContent = 'Cannot reach server — check it is running and the URL is correct';
+    }
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entered = document.getElementById('pwInput').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginSubmitBtn');
+    errEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+
+    const res = await apiCall('/api/login', { method:'POST', body:{ password: entered } });
+
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+
+    if(res.networkError){
+      errEl.textContent = 'Cannot reach the server. Check your connection and try again.';
+      return;
+    }
+    if(!res.ok){
+      errEl.textContent = (res.data && res.data.error) || 'Incorrect password.';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+      return;
+    }
+
+    sessionToken = res.data.token;
+    try{ sessionStorage.setItem(SESSION_KEY, sessionToken); }catch(e){}
+    showAppScreen(true);
+    showToast('Loading shared inventory…');
+    await refreshItems();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async function(){
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Logging out…';
+    await apiCall('/api/logout', { method:'POST' }).catch(()=>{});
+    handleSessionExpired();
+    btn.disabled = false;
+    btn.textContent = 'Log Out';
+    showAppScreen(false);
+  });
+
+  // ---------------------------------------------------------------------
+  // Change password
+  // ---------------------------------------------------------------------
+  const pwModalOverlay = document.getElementById('pwModalOverlay');
+  document.getElementById('settingsBtn').addEventListener('click', () => {
+    document.getElementById('pwForm').reset();
+    document.getElementById('pwError').textContent = '';
+    pwModalOverlay.classList.add('show');
+  });
+  document.getElementById('cancelPwBtn').addEventListener('click', () => pwModalOverlay.classList.remove('show'));
+  pwModalOverlay.addEventListener('click', e => { if(e.target === pwModalOverlay) pwModalOverlay.classList.remove('show'); });
+
+  document.getElementById('pwForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const cur = document.getElementById('currentPwInput').value;
+    const next = document.getElementById('newPwInput').value;
+    const confirmVal = document.getElementById('confirmPwInput').value;
+    const errEl = document.getElementById('pwError');
+    const btn = document.getElementById('pwSubmitBtn');
+
+    if(next !== confirmVal){
+      errEl.textContent = 'New password and confirmation do not match.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Updating…';
+
+    const res = await apiCall('/api/change-password', {
+      method:'POST',
+      body:{ currentPassword: cur, newPassword: next }
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Update Password';
+
+    if(res.networkError){
+      errEl.textContent = 'Cannot reach the server. Try again.';
+      return;
+    }
+    if(!res.ok){
+      errEl.textContent = (res.data && res.data.error) || 'Could not update password.';
+      return;
+    }
+    pwModalOverlay.classList.remove('show');
+    showToast('Password updated for all devices.');
+  });
+
+  // ---------------------------------------------------------------------
+  // Init — try to resume an existing session (e.g. after a page reload,
+  // not a real logout) before falling back to the login screen.
+  // ---------------------------------------------------------------------
+  async function init(){
+    checkServerConnection();
+    let existingToken = null;
+    try{ existingToken = sessionStorage.getItem(SESSION_KEY); }catch(e){}
+
+    if(existingToken){
+      sessionToken = existingToken;
+      const res = await apiCall('/api/items');
+      if(res.ok){
+        state.items = (res.data && res.data.items) || [];
+        showAppScreen(true);
+        renderAll();
+        return;
+      }
+      // Stored token no longer valid — fall through to login.
+      handleSessionExpired();
+    }
+    showAppScreen(false);
+    document.getElementById('pwInput').focus();
+  }
+  init();
+
+})();
+</script>
+</body>
+</html>
